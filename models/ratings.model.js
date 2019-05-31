@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const ratingsSchema = mongoose.Schema({
     customerId: {type: Number, required: true},
     productId: {type:Number,required: true},
-    rating: {type:Number, min:1, max:5, required: true},
+    rating: {type: Number, min: 1, max: 5, required: true, validate: {
+        validator : Number.isInteger,
+        message   : '{VALUE} is not an integer value'
+      }},
     softDelete: {type: Boolean, default: false}
 }, {timestamps: true}); //creates createdAt and updatedAt fields for tracking
 

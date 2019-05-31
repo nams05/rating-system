@@ -1,0 +1,30 @@
+{
+  "name": "ratings_system",
+  "version": "1.0.0",
+  "description": "A ratings system for capturing and displaying product ratings",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js >> server.log",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nams05/rating-system.git"
+  },
+  "keywords": [
+    "ratings",
+    "furniture",
+    "customer"
+  ],
+  "author": "Namrata Gupta",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/nams05/rating-system/issues"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongoose": "^5.5.7"
+  },
+  "homepage": "https://github.com/nams05/rating-system#readme"
+}
