@@ -63,38 +63,58 @@ exports.formatRatingsBreakupResponse = function (rating) {
 }
 
 exports.validate = function(request) {
+    let result = new Object();
+    result.valid = true;
+    result.message = Messages.malformedRequestError;
+
     if(request.method == "POST"){
-        var body = request.body;
-        if (!body.customerId || !body.productId) {
-            return false;
+        var body = request.body;    
+        if (body.rating) {
+            ratingValidation = validateRating(body.rating);
+            result.valid = ratingValidation.valid;
+            result.message = ratingValidation.message;
+        }
+        else{
+            result.valid = false;
+            result.message = Messages.ratingNotFound;
+        }
+
+        if (!result.valid || !body.customerId || !body.productId) {
+            result.valid = false;
+            return result;
         } else {
-            return true;
+            return result;
         }
     }
     else if(request.method == "GET"){
         var body = request.params;
         if (body.customerId || body.productId) {
-            return true;
+            return result;
         } else {
-            return false;
+            result.valid = false;
+            return result;
         }
     }
 }
 
-exports.validateRating = function(ratings){
-    if(!ratings.rating){
-        return [false, Messages.ratingNotFound]
+const validateRating = function(rating){
+    let result = new Object();
+    result.valid = true
+    result.message = Messages.malformedRequestError
+
+    if(!Number.isInteger(rating)){
+        result.valid = false;
+        result.message = rating + Messages.ratingIntegerValueError;
     }
-    else{
-        if(!Number.isInteger(ratings.rating)){
-            return [false, ratings.rating + Messages.ratingIntegerValueError]
-        }
-        if(ratings.rating < 1 || ratings.rating > 5 ){
-            return [false, Messages.ratingValueError]
-        }
-        return [true, ""]
+    if(rating < 1 || rating > 5 ){
+        result.valid = false
+        result.message += Messages.ratingValueError;
+        return result;
     }
+    return result;
+    
 }
+
 exports.getFailureResponse = () => {
     let response = new Object();
     response.status = Messages.failure;

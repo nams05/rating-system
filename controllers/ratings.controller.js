@@ -9,8 +9,9 @@ const messages = require('../config/messages')
 //delete product rating. Returns the delete object
 exports.deleteRating = (request, response) => {
     console.log("Request body:", request.body);
-    if (!utils.validate(request)){
-        return response.status(400).send(messages.badRequest);
+    let validationResult = utils.validate(request);
+    if (!validationResult.valid){
+        return response.status(400).send(validationResult.message);
     };
     RatingModel.findOneAndUpdate({customerId: request.body.customerId, productId: request.body.productId}, {$set: {softDelete: true}}, {new: true}, (err, rating) => {
         // Handle any possible database errors
@@ -30,13 +31,10 @@ exports.deleteRating = (request, response) => {
 // Add product rating if not present otherwise updates. Returns the added/updated ratings object
 exports.addOrUpdateRating = (request, response) => {
     console.log("Request body:", request.body);
-    if (!utils.validate(request)){
-        return response.status(400).send(messages.badRequest);
+   let validationResult = utils.validate(request);
+    if (!validationResult.valid){
+        return response.status(400).send(validationResult.message);
     };
-    let ratingValidator = utils.validateRating(request.body);
-    if(!ratingValidator[0]){
-        return response.status(400).send(ratingValidator[1]);
-    }
     RatingModel.findOneAndUpdate({customerId: request.body.customerId, productId: request.body.productId, softDelete: false}, 
         {$set: {customerId: request.body.customerId, productId: request.body.productId, rating: request.body.rating}}, 
         {upsert: true, new: true}, function(err, rating) {
@@ -54,8 +52,9 @@ exports.addOrUpdateRating = (request, response) => {
 // returns product rating given by customer.
 exports.fetchProductRatingByCustomer = (request, response) => {
     console.log("Request body:", request.params);
-    if (!utils.validate(request)){
-        return response.status(400).send(messages.badRequest);
+    let validationResult = utils.validate(request);
+    if (!validationResult.valid){
+        return response.status(400).send(validationResult.message);
     };
     RatingModel.findOne()
     .where('customerId').equals(Number(request.params.customerId))
@@ -86,8 +85,9 @@ exports.fetchProductRatingByCustomer = (request, response) => {
 // Returns average product rating
 exports.fetchAveragegRating = (request, response) => {
     console.log("Request body:", request.params);
-    if (!utils.validate(request)){
-        return response.status(400).send(messages.badRequest);
+    let validationResult = utils.validate(request);
+    if (!validationResult.valid){
+        return response.status(400).send(validationResult.message);
     };
     RatingModel.aggregate(
         [
@@ -122,8 +122,9 @@ exports.fetchAveragegRating = (request, response) => {
 // Returns product rating break down 
 exports.fetchRatingsBreakup = (request, response) => {
     console.log("Request body:", request.body);
-    if (!utils.validate(request)){
-        return response.status(400).send(messages.badRequest);
+    let validationResult = utils.validate(request);
+    if (!validationResult.valid){
+        return response.status(400).send(validationResult.message);
     };
     RatingModel.find().where('productId').equals(request.params.productId)
     .where('softDelete').equals(false)
