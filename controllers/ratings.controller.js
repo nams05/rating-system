@@ -1,6 +1,7 @@
 'use strict'
 
 const utils = require('../utils/utils');
+const validateUtils = require('../utils/validation.utils');
 const RatingModel = require('../models/ratings.model');
 const CustomerModel = require('../models/customer.model');
 const ProductModel = require('../models/product.model');
@@ -9,7 +10,7 @@ const messages = require('../config/messages')
 //delete product rating. Returns the delete object
 exports.deleteRating = (request, response) => {
     console.log("Request body:", request.body);
-    let validationResult = utils.validate(request);
+    let validationResult = validateUtils.validate(request);
     if (!validationResult.valid){
         return response.status(400).send(validationResult.message);
     };
@@ -31,7 +32,7 @@ exports.deleteRating = (request, response) => {
 // Add product rating if not present otherwise updates. Returns the added/updated ratings object
 exports.addOrUpdateRating = (request, response) => {
     console.log("Request body:", request.body);
-   let validationResult = utils.validate(request);
+   let validationResult = validateUtils.validate(request);
     if (!validationResult.valid){
         return response.status(400).send(validationResult.message);
     };
@@ -52,7 +53,7 @@ exports.addOrUpdateRating = (request, response) => {
 // returns product rating given by customer.
 exports.fetchProductRatingByCustomer = (request, response) => {
     console.log("Request body:", request.params);
-    let validationResult = utils.validate(request);
+    let validationResult = validateUtils.validate(request);
     if (!validationResult.valid){
         return response.status(400).send(validationResult.message);
     };
@@ -85,7 +86,7 @@ exports.fetchProductRatingByCustomer = (request, response) => {
 // Returns average product rating
 exports.fetchAveragegRating = (request, response) => {
     console.log("Request body:", request.params);
-    let validationResult = utils.validate(request);
+    let validationResult = validateUtils.validate(request);
     if (!validationResult.valid){
         return response.status(400).send(validationResult.message);
     };
@@ -122,7 +123,7 @@ exports.fetchAveragegRating = (request, response) => {
 // Returns product rating break down 
 exports.fetchRatingsBreakup = (request, response) => {
     console.log("Request body:", request.body);
-    let validationResult = utils.validate(request);
+    let validationResult = validateUtils.validate(request);
     if (!validationResult.valid){
         return response.status(400).send(validationResult.message);
     };
